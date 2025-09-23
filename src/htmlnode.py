@@ -21,8 +21,8 @@ class HTMLNode:
 
 
 class LeafNode(HTMLNode):
-     def __init__(  self,tag, value, props = None):
-         super().__init__(tag, value,None,props)
+     def __init__(self, tag, value, props = None):
+         super().__init__(tag, value, None, props)
 
      def to_html(self):
         if not self.value:
@@ -33,8 +33,39 @@ class LeafNode(HTMLNode):
         if attributes is None:
             return f"<{self.tag}>{self.value}</{self.tag}>"
         return f"<{self.tag}{attributes}>{self.value}</{self.tag}>"
+     
+class ParentNode(HTMLNode):
+    def __init__(self, tag, children, props = None):
+        super().__init__(tag, None, children, props)
+
+    def to_html(self):
+        if self.tag is None:
+            raise ValueError("MUST HAVE TAG")
+        if not self.children:
+            raise ValueError("MUST HAVE CHILDREN")
+        
+        childrenTag =""
+        for item in self.children:
+            childrenTag += item.to_html()
+
+        parent_props = self.props_to_html()
+
+        if parent_props:
+            return f"<{self.tag}{self.props_to_html()}>{childrenTag}</{self.tag}>"
+        
+        return f"<{self.tag}>{childrenTag}</{self.tag}>"
+        
 
 
+node = ParentNode(
+    "p",
+    [
+        LeafNode("b", "Bold text",{"class":"mx-5","ref":"someref"}),
+        LeafNode(None, "Normal text", {"this":"is wrong"} ),
+        LeafNode("i", "italic text"),
+        LeafNode(None, "Normal text"),
+    ],
+    {"class":"mx-10"}
+)
 
-
-    
+print(node.to_html())
