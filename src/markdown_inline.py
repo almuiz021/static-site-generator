@@ -28,18 +28,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
     return new_nodes
 
-
-
-
-[
-    TextNode("This is text with an ", TextType.TEXT),
-    TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
-    TextNode(" and another ", TextType.TEXT),
-    TextNode(
-        "second image", TextType.IMAGE, "https://i.imgur.com/3elNhQu.png"
-    ),
-],
-
 def extract_markdown_images(text):
     pattern = r"!\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
@@ -50,19 +38,6 @@ def extract_markdown_links(text):
     pattern = r"(?<!!)\[([^\[\]]*)\]\(([^\(\)]*)\)"
     matches = re.findall(pattern, text)
     return matches
-
-# def extract_markdown_images(text):
-#     regex = r"\[(.*?)\]\((.*?)\)"
-#     matches = re.findall(regex, text)
-#     return matches
-
-# def extract_markdown_links(text):
-#     regex = r"\[(.*?)\]\((.*?)\)"
-#     matches = re.findall(regex,text)
-#     return matches
-
-
-
 
 def split_nodes_image(old_nodes):
     new_nodes = []
@@ -113,3 +88,20 @@ def split_nodes_link(old_nodes):
         if original_text != "":
             new_nodes.append(TextNode(original_text,TextType.TEXT))
     return new_nodes
+
+
+def text_to_textnodes(text):
+    old_node = TextNode(text, TextType.TEXT)
+    bolded = split_nodes_delimiter([old_node],"**", TextType.BOLD)
+    italic = split_nodes_delimiter(bolded,"_", TextType.ITALIC)
+    code = split_nodes_delimiter(italic,"`", TextType.CODE)
+
+    images = split_nodes_image(code)
+    links = split_nodes_link(images)
+    
+    
+    return links
+
+
+
+print(text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"))
