@@ -1,4 +1,5 @@
 import os, shutil
+from markdown_blocks import markdown_to_html_node, extract_title
 
 def copystatic(source, destination):
     # print(source, destination)
@@ -21,6 +22,29 @@ def copystatic(source, destination):
             else:
                 copystatic(new_source,new_dest)
 
+
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+
+    with open(from_path) as content_file:
+        content = content_file.read()
+
+    with open(template_path) as template_file:
+        template = template_file.read()
+
+
+    html = markdown_to_html_node(content)
+    title = extract_title(content)
+
+    replaced_title = template.replace("{{ Title }}", title)
+
+    replaced_content = replaced_title.replace("{{ Content }}", html.to_html())
+
+    # os.makedirs(dest_path,exist_ok=True)
+
+    with open(dest_path, "w") as to_write:
+        all_content = to_write.write(replaced_content)
 
 
     
