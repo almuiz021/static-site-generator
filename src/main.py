@@ -1,12 +1,7 @@
-from textnode import TextType, TextNode 
-from htmlnode import HTMLNode, LeafNode, ParentNode
-from markdown_inline import split_nodes_delimiter, extract_markdown_images,extract_markdown_links
-from markdown_blocks import block_to_block_type
+from copystatic import copystatic
 def main():
-    
-    dummy = TextNode("Some Text",TextType.LINK,"https://www.muiz.com")
-    # print(dummy)
-
-
+    print("main")
+    copystatic("static/","public/")
+ 
 if __name__ == "__main__":
     main()
