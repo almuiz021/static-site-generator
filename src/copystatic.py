@@ -41,10 +41,12 @@ def generate_page(from_path, template_path, dest_path, basepath):
 
     replaced_content = replaced_title.replace("{{ Content }}", html.to_html())
 
-    replace_for_host = replaced_content.replace('href="/"',f'href="{basepath}"')
+    replace_for_host = replaced_content.replace('href="/',f'href="{basepath}')
+    
+    replace_src = replace_for_host.replace('src="/',f'src="{basepath}')
 
     with open(dest_path, "w") as to_write:
-        all_content = to_write.write(replaced_content)
+        to_write.write(replace_src)
 
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path,basepath):
