@@ -3,7 +3,6 @@ from textnode import TextNode, TextType
  
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    
     new_nodes = []
     for each_node in old_nodes:
         node_text = each_node.text
@@ -24,7 +23,6 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                     else:
                         diff_node = TextNode(splitted[i], text_type)
                         new_nodes.append(diff_node)
-
 
     return new_nodes
 
